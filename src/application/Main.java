@@ -18,6 +18,7 @@ public class Main {
 		System.out.println(sellerDAO.findByDepartment(dp));
 		System.out.println(sellerDAO.findAll());
 		System.out.println(dpDAO.findAll());
+		dpDAO.deleteById(1);
 	}
 
 }

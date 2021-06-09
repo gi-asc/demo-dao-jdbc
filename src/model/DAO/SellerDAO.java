@@ -91,8 +91,25 @@ public class SellerDAO implements DAO<Seller> {
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
-		
+		PreparedStatement ps = null;
+		String deletar = "DELETE FROM seller "
+				         +"WHERE id=?";
+		try {
+			ps = conn.prepareStatement(deletar);
+			ps.setInt(1, id);
+			if(findById(id)!=null) {
+				ps.execute();
+				}else {
+					throw new DbException("Usuario Inexistente");
+				}
+		}
+			catch(SQLException e) {
+				throw new DbException(e.getMessage());
+			}catch(DbException e) {
+				System.out.println(e.getMessage());
+			}finally {
+				DB.closeStatement(ps);
+			}
 	}
 
 	@Override

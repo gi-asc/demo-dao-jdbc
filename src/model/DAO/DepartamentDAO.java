@@ -82,7 +82,31 @@ public class DepartamentDAO implements DAO<Departament> {
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
+		String deletar = "DELETE FROM department "
+				         +"WHERE id=?";
+		try {
+			ps = conn.prepareStatement(deletar);
+			ps.setInt(1, id);
+			SellerDAO sd = FactoryDAO.createSellerDAO();
+			if(findById(id)!=null) {
+				if(sd.findByDepartment(findById(id))==null) {
+				ps.execute();	
+				}
+				else {
+					throw new DbException("Você não pode deletar um departamento que possui vendedores.");
+				}
+				}else {
+					throw new DbException("Usuario Inexistente");
+				}
+		}
+			catch(SQLException e) {
+				throw new DbException(e.getMessage());
+			}catch(DbException e) {
+				System.out.println(e.getMessage());
+			}finally {
+				DB.closeStatement(ps);
+			}
 		
 	}
 
