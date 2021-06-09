@@ -15,6 +15,7 @@ public class Main {
 		DepartamentDAO dpDAO = FactoryDAO.createDepartamentDAO();
 		Departament dp = dpDAO.findById(2);
 		System.out.println(dp);
+		System.out.println(sellerDAO.findByDepartment(dp));
 	}
 
 }

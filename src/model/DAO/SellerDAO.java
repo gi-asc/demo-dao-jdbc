@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -77,6 +78,30 @@ public class SellerDAO implements DAO<Seller> {
     	String email = rs.getString("email");
     	String nome = rs.getString("name");
     	return new Seller(id, nome, email, niver, salario, department);
+	}
+	
+	public List<Seller> findByDepartment(Departament department){
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<Seller> lista = new ArrayList<>();
+		String querySql = "SELECT * FROM seller WHERE DepartmentId = ?";
+		try {
+			ps = conn.prepareStatement(querySql);
+			ps.setInt(1, department.getId());
+			rs = ps.executeQuery();
+			while(rs.next()) {
+			Seller s = instantiateSeller(rs, rs.getInt("Id"), department);
+			lista.add(s);	
+			}
+            return lista;
+		}
+		catch(SQLException e) {
+	    	throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(ps);
+		}
 	}
 	
 	@Override
