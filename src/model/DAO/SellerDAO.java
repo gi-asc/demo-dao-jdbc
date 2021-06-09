@@ -57,7 +57,35 @@ public class SellerDAO implements DAO<Seller> {
 	}
 	@Override
 	public void update(Seller t) {
-		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
+		String alterar = "UPDATE seller "
+				         +"SET name=?, email=?, BirthDate=?, BaseSalary=? DepartmentId=?  "
+				         +"WHERE id=?";
+		try {
+			ps = conn.prepareStatement(alterar);
+			ps.setInt(5, t.getId());
+			ps.setString(1, t.getNome());
+			ps.setDate(2, t.getAniversario());
+			ps.setDouble(3, t.getSalario());
+			ps.setInt(4, t.getDepartament().getId());
+			if(findById(t.getId())!=null) {
+				if((t.getId()!=0) && t.getNome()!=null && t.getAniversario()!=null && t.getSalario()!=0 && t.getDepartament()!=null && t.getEmail()!=null) {
+				ps.execute();
+				}else {
+					throw new DbException("Dados Faltando!");
+				}
+			}
+			else {
+				throw new DbException("Id Inexistente.");
+			}
+		}
+			catch(SQLException e) {
+				throw new DbException(e.getMessage());
+			}catch(DbException e) {
+				System.out.println(e.getMessage());
+			}finally {
+				DB.closeStatement(ps);
+			}
 		
 	}
 
