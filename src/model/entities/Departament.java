@@ -6,13 +6,13 @@ public class Departament implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private int id;
-	private int name;
+	private String name;
 	
 	public Departament() {
 		
 	}
 
-	public Departament(int id, int name) {
+	public Departament(int id, String name) {
 		this.id = id;
 		this.name = name;
 	}
@@ -25,12 +25,12 @@ public class Departament implements Serializable{
 		this.id = id;
 	}
 
-	public int getName() {
+	public String getName() {
 		return name;
 	}
 
-	public void setName(int name) {
-		this.name = name;
+	public void setName(String string) {
+		this.name = string;
 	}
 
 	@Override

@@ -1,0 +1,79 @@
+package model.DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
+
+import db.DB;
+import db.DbException;
+import model.entities.Departament;
+import model.entities.Seller;
+
+public class SellerDAO implements DAO<Seller> {
+	
+	private Connection conn;
+	
+	public SellerDAO(Connection conn) {
+		this.conn = conn;
+	}
+
+	@Override
+	public void insert(Seller t) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void update(Seller t) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteById(Integer id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Seller findById(Integer id) {
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+	    try {
+	    	String sql = "SELECT seller.*,department.Name as DepName "
+	    		    +"FROM seller INNER JOIN department "
+	    		    +"ON seller.DepartmentId = department.Id "
+	    		    +"WHERE seller.Id = ?";
+	    	ps = conn.prepareStatement(sql);
+	    	ps.setInt(1, id);
+	    	rs = ps.executeQuery();
+	    	if(rs.next()) {
+	    	Departament department = new Departament();
+	    	department.setId(rs.getInt("DepartmentId"));
+	    	department.setName(rs.getString("DepName"));
+	    	Date niver = rs.getDate("BirthDate");
+	    	Double salario = rs.getDouble("BaseSalary");
+	    	String email = rs.getString("email");
+	    	String nome = rs.getString("name");
+	    	return new Seller(id, nome, email, niver, salario, department);
+	    	}
+	    	return null;
+	    }
+	    catch(SQLException e) {
+	    	throw new DbException(e.getMessage());
+	    }
+	    finally {
+	    	DB.closeStatement(ps);
+	    	DB.closeResultSet(rs);
+	    }
+	}
+
+	@Override
+	public List<Seller> findAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
