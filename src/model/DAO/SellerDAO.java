@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +25,35 @@ public class SellerDAO implements DAO<Seller> {
 
 	@Override
 	public void insert(Seller t) {
-		// TODO Auto-generated method stub
-		
+		PreparedStatement ps = null;
+		String inserir = "INSERT INTO seller "
+				         +"(Id, Name, email, BirthDate, BaseSalary, DepartmentId) "
+				         +"VALUES(?, ?, ?, ?, ?, ?)";
+		try {
+			ps = conn.prepareStatement(inserir);
+			ps.setInt(1, t.getId());
+			ps.setString(2, t.getNome());
+			ps.setDate(3, t.getAniversario());
+			ps.setDouble(4, t.getSalario());
+			ps.setInt(5, t.getDepartament().getId());
+			if(findById(t.getId())==null) {
+				if((t.getId()!=0) && t.getNome()!=null && t.getAniversario()!=null && t.getSalario()!=0 && t.getDepartament()!=null && t.getEmail()!=null) {
+				ps.execute();
+				}else {
+					throw new DbException("Dados Faltando!");
+				}
+			}
+			else {
+				throw new DbException("Id já cadastrado!");
+			}
+		}
+			catch(SQLException e) {
+				throw new DbException(e.getMessage());
+			}catch(DbException e) {
+				System.out.println(e.getMessage());
+			}finally {
+				DB.closeStatement(ps);
+			}
 	}
 	@Override
 	public void update(Seller t) {
