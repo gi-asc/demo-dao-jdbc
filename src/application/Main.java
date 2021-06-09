@@ -16,6 +16,8 @@ public class Main {
 		Departament dp = dpDAO.findById(2);
 		System.out.println(dp);
 		System.out.println(sellerDAO.findByDepartment(dp));
+		System.out.println(sellerDAO.findAll());
+		System.out.println(dpDAO.findAll());
 	}
 
 }
