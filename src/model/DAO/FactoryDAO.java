@@ -12,7 +12,7 @@ public class FactoryDAO {
 		return new SellerDAO(conn);
 	}
 	
-	public static DepartamentDAO createDepartament() {
+	public static DepartamentDAO createDepartamentDAO() {
 		return new DepartamentDAO(conn);
 	}
 	

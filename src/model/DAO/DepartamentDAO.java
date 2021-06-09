@@ -39,17 +39,14 @@ public class DepartamentDAO implements DAO<Departament> {
 	public Departament findById(Integer id) {
 		PreparedStatement ps = null;
 	    ResultSet rs = null;
-	    String sql = "select * Department where "
+	    String sql = "SELECT * from Department where "
 	    		     +"id = ?";
 	    try {
 	    	ps = conn.prepareStatement(sql);
 	    	ps.setInt(1, id);
 	    	rs = ps.executeQuery();
 	    	if(rs.next()) {
-	    	Departament department = new Departament();
-	    	department.setId(rs.getInt("DepartmentId"));
-	    	department.setName(rs.getString("DepName"));
-	    	return department;
+	    	return instantiateDepartment(rs);
 	    	}
 	    	return null;
 	    }
@@ -60,6 +57,13 @@ public class DepartamentDAO implements DAO<Departament> {
 	    	DB.closeStatement(ps);
 	    	DB.closeResultSet(rs);
 	    }
+	}
+	
+	private Departament instantiateDepartment(ResultSet rs) throws SQLException {
+		Departament department = new Departament();
+    	department.setId(rs.getInt("Id"));
+    	department.setName(rs.getString("Name"));
+    	return department;
 	}
 
 	@Override

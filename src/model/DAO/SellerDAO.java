@@ -50,14 +50,8 @@ public class SellerDAO implements DAO<Seller> {
 	    	ps.setInt(1, id);
 	    	rs = ps.executeQuery();
 	    	if(rs.next()) {
-	    	Departament department = new Departament();
-	    	department.setId(rs.getInt("DepartmentId"));
-	    	department.setName(rs.getString("DepName"));
-	    	Date niver = rs.getDate("BirthDate");
-	    	Double salario = rs.getDouble("BaseSalary");
-	    	String email = rs.getString("email");
-	    	String nome = rs.getString("name");
-	    	return new Seller(id, nome, email, niver, salario, department);
+	    	Departament department = instantiateDepartment(rs);
+	    	return instantiateSeller(rs, id, department);
 	    	}
 	    	return null;
 	    }
@@ -70,6 +64,21 @@ public class SellerDAO implements DAO<Seller> {
 	    }
 	}
 
+	private Departament instantiateDepartment(ResultSet rs) throws SQLException {
+		Departament department = new Departament();
+    	department.setId(rs.getInt("DepartmentId"));
+    	department.setName(rs.getString("DepName"));
+    	return department;
+	}
+
+	private Seller instantiateSeller(ResultSet rs, int id, Departament department) throws SQLException {
+		Date niver = rs.getDate("BirthDate");
+    	Double salario = rs.getDouble("BaseSalary");
+    	String email = rs.getString("email");
+    	String nome = rs.getString("name");
+    	return new Seller(id, nome, email, niver, salario, department);
+	}
+	
 	@Override
 	public List<Seller> findAll() {
 		// TODO Auto-generated method stub
