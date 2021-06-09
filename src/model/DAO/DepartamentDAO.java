@@ -21,9 +21,34 @@ public class DepartamentDAO implements DAO<Departament> {
 
 	@Override
 	public void insert(Departament t) {
-		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
+		String inserir = "INSERT INTO department "
+				         +"(Id, Name) "
+				         +"VALUES(?, ?)";
+		try {
+			ps = conn.prepareStatement(inserir);
+			ps.setInt(1, t.getId());
+			ps.setString(2, t.getName());
+			if(findById(t.getId())==null) {
+				if((t.getId()!=0) && t.getName()!=null) {
+				ps.execute();
+				}else {
+					throw new DbException("Dados Faltando!");
+				}
+			}
+			else {
+				throw new DbException("Id já cadastrado!");
+			}
+		}
+			catch(SQLException e) {
+				throw new DbException(e.getMessage());
+			}catch(DbException e) {
+				System.out.println(e.getMessage());
+			}finally {
+				DB.closeStatement(ps);
+			}
+		}
 		
-	}
 	@Override
 	public void update(Departament t) {
 		// TODO Auto-generated method stub
